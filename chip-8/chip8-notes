@@ -1,0 +1,62 @@
+35 instructions
+chip-8 virtual machine
+Chip-8 is implemented on 4k systems.
+They have 4096 memory locations 0x1000. Each memory location is 1 byte or 8 bit.
+first 512 bytes for interpreter in memory(0x0-0x200).
+high 256 bytes are reserved(0xf00-0fff) for display refresh.
+96 bytes below are reserved for internal call stack and variables(BSS?)
+
+In modern interpretation first 512 might be used for something else?
+
+Chip-8 registers
+16 8 bit registers
+V0 - VF
+VF is(could be) flag register.
+VF in addition is carry flag.
+VF in substraction is no borrow flag.
+I is 16 bit address register. Used in lot of opcodes involving memory.
+Stack is for storing return address. 48 bytes for 24 level of nesting.
+
+Chip-8 has two timers
+60hz to 0.
+Delay timer: set and get. Timing gaming events
+Sound timer: non zero means beeping
+
+inputs:
+keyboard is 0 to F as inputs. 8,4,6,2 would be directional keys( I guess like WASD?). 
+Input opcodes
+a. Skip an instruction if input is pressed
+b. skip an instructon if input key is not pressed
+c. wait for input and store it in data register.
+
+Graphics:
+64X32 pixels resolution.
+Monochrome
+Sprites are 8 pixels wide and 1 to 15 pixels in height.
+Spirites are XORed with screen pixel.
+Set spirites flip the colour of the screen pixel. unset spirites don't do anything.
+Carry(VF) flag is set to 1 if screen pixels are flipped from set to unset when spirit is drawn
+and set to 0 otherwise.
+
+Opcode
+35 opcodes
+2 bytes long and big endian.
+NNN = address
+NN = 8 bit constant
+N = 4 bit constant
+X and Y 4 bit register identifier
+PC: program counter
+I: 16 bit register.
+VN: 16 available variables.
+
+RCA subroutine calls
+No CALL and RET instructions
+Keep subroutine address in one of the 16 bit registers.
+PC must know to call return after call.
+SEP or set program counter knows  the address of the subroutines to call from 16 bit address.
+SEP returns to the instruction before the calling point.
+increment PC after usage.
+
+
+	
+	
